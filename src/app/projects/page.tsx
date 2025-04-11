@@ -54,7 +54,7 @@ export default function Projects() {
       <div className="container mx-auto max-w-6xl px-4">
         <h1 className="text-3xl md:text-5xl font-bold mb-4">My Projects</h1>
         <p className="text-lg md:text-xl text-gray-300 mb-10">
-          A showcase of Discord bots I've developed for various purposes and communities.
+          A showcase of Discord bots I&apos;ve developed for various purposes and communities.
         </p>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

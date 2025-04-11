@@ -108,6 +108,79 @@ module.exports = {
         }
     }
 };`
+    },
+    {
+      id: 'ticket-restrict',
+      title: 'Ticket Restrict Command',
+      description: 'A Discord slash command for Asteroid Game Studios that restricts ticket access to directors only, escalating support issues when needed.',
+      language: 'javascript',
+      code: `const { SlashCommandBuilder, EmbedBuilder } = require('discord.js')
+const config = require('../config.json');
+
+const TicketPrefixes = [
+    'general-',
+    'alt-verify-',
+    'developer-',
+    'appeal-',
+    'partnership-'
+];
+
+module.exports = {
+    data: new SlashCommandBuilder()
+        .setName('restrict')
+        .setDescription('Restrict access to this ticket from normal support.'),
+    async execute(interaction) {
+        const ticketChannel = interaction.channel;
+
+        const isValidTicketChannel = TicketPrefixes.some(prefix => ticketChannel.name.startsWith(prefix));
+        if (!isValidTicketChannel) {
+            return interaction.reply({ content: 'This command can only be used in ticket channels.', ephemeral: true });
+        }
+
+        const isAuthorised = interaction.member.roles.cache.some(role =>
+            role.id === config.DirectorRoleId
+        );
+
+        if (!isAuthorised) {
+            return interaction.reply({ content: 'You do not have permission to restrict tickets.', ephemeral: true });
+        }
+
+        await ticketChannel.permissionOverwrites.edit(config.SupportRoleId, {
+            ViewChannel: false
+        });
+
+        if (ticketChannel.name.startsWith('developer-')) {
+            await ticketChannel.permissionOverwrites.edit(config.DeveloperRoleId, {
+                ViewChannel: false
+            });
+
+            await ticketChannel.permissionOverwrites.edit(config.DirectorRoleId, {
+                ViewChannel: true
+            });
+        } else if (
+            ticketChannel.name.startsWith('general-')
+        ) {
+            await ticketChannel.permissionOverwrites.edit(config.DeveloperRoleId, {
+                ViewChannel: false
+            });
+
+            await ticketChannel.permissionOverwrites.edit(config.DirectorRoleId, {
+                ViewChannel: true
+            });
+        }
+
+        await ticketChannel.setParent(config.restrictedCategoryId, { lockPermissions: false });
+
+        const restrictembed = new EmbedBuilder()
+            .setColor('Blurple')
+            .setTitle('Ticket Restricted')
+            .setDescription(\`This ticket has been **escalated** to <@&\${config.DirectorRoleId}>.\`)
+
+        await ticketChannel.send({ embeds: [restrictembed] });
+
+        await interaction.reply({ content: 'The ticket has been restricted. Directors have been notified.', ephemeral: true });
+    }
+};`
     }
   ];
 

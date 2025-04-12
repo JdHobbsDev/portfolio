@@ -1,12 +1,10 @@
-import './globals.css';
-import { Inter } from 'next/font/google';
-import ClientLayout from '@/components/ClientLayout';
-
-const inter = Inter({ subsets: ['latin'] });
+import "./globals.css";
+import ClientLayout from "@/components/ClientLayout";
 
 export const metadata = {
-  title: 'Jd Hobbs | Portfolio',
-  description: 'A discord.js developer with a passion for creating innovative and efficient solutions.',
+  title: "JdHobbsDev - Discord Bot Developer",
+  description: "Portfolio of Jd Hobbs, a Discord.js developer specializing in creating innovative Discord bots.",
+  viewport: "width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover",
 };
 
 export default function RootLayout({
@@ -17,9 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="data:," />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
       </head>
-      <body className={`${inter.className} bg-gray-900 text-white`}>
+      <body>
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

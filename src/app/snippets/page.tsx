@@ -1,15 +1,15 @@
-'use client';
-
-import { FaCode } from 'react-icons/fa';
-import { useEffect } from 'react';
-import Prism from 'prismjs';
-import 'prismjs/themes/prism-tomorrow.css';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/components/prism-typescript';
-import 'prismjs/components/prism-jsx';
-import 'prismjs/components/prism-tsx';
-import 'prismjs/components/prism-python';
-import 'prismjs/components/prism-json';
+"use client";
+import { useEffect } from "react";
+import Prism from "prismjs";
+import "prismjs/themes/prism-tomorrow.css";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-tsx";
+import "prismjs/components/prism-css";
+import "prismjs/components/prism-json";
+import "prismjs/plugins/line-numbers/prism-line-numbers.js";
+import "prismjs/plugins/line-numbers/prism-line-numbers.css";
 
 export default function Snippets() {
   useEffect(() => {
@@ -142,77 +142,78 @@ module.exports = {
         );
 
         if (!isAuthorised) {
-            return interaction.reply({ content: 'You do not have permission to restrict tickets.', ephemeral: true });
+            return interaction.reply({ content: 'You do not have permission to use this command.', ephemeral: true });
         }
 
-        await ticketChannel.permissionOverwrites.edit(config.SupportRoleId, {
-            ViewChannel: false
-        });
-
-        if (ticketChannel.name.startsWith('developer-')) {
-            await ticketChannel.permissionOverwrites.edit(config.DeveloperRoleId, {
+        try {
+            // Remove all support roles from viewing the ticket
+            await ticketChannel.permissionOverwrites.edit(config.SupportRoleId, {
                 ViewChannel: false
             });
 
-            await ticketChannel.permissionOverwrites.edit(config.DirectorRoleId, {
-                ViewChannel: true
-            });
-        } else if (
-            ticketChannel.name.startsWith('general-')
-        ) {
-            await ticketChannel.permissionOverwrites.edit(config.DeveloperRoleId, {
-                ViewChannel: false
-            });
+            const restrictEmbed = new EmbedBuilder()
+                .setColor('#FF5555')
+                .setTitle('Ticket Restricted')
+                .setDescription('This ticket has been restricted to directors only.')
+                .setFooter({ text: 'Asteroid Studios Support' })
+                .setTimestamp();
 
-            await ticketChannel.permissionOverwrites.edit(config.DirectorRoleId, {
-                ViewChannel: true
-            });
+            await interaction.reply({ embeds: [restrictEmbed] });
+        } catch (error) {
+            console.error('Error restricting ticket:', error);
+            await interaction.reply({ content: 'There was an error restricting this ticket.', ephemeral: true });
         }
-
-        await ticketChannel.setParent(config.restrictedCategoryId, { lockPermissions: false });
-
-        const restrictembed = new EmbedBuilder()
-            .setColor('Blurple')
-            .setTitle('Ticket Restricted')
-            .setDescription(\`This ticket has been **escalated** to <@&\${config.DirectorRoleId}>.\`)
-
-        await ticketChannel.send({ embeds: [restrictembed] });
-
-        await interaction.reply({ content: 'The ticket has been restricted. Directors have been notified.', ephemeral: true });
     }
 };`
     }
   ];
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white py-16">
-      <div className="container mx-auto max-w-6xl px-4">
-        <h1 className="text-3xl md:text-5xl font-bold mb-4">Code Snippets</h1>
-        <p className="text-lg md:text-xl text-gray-300 mb-10">
-          A collection of code snippets from my Discord bot projects showcasing my coding style and expertise.
-        </p>
+    <main className="min-h-screen bg-[#0B1120] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1A2942]/50 via-[#0B1120] to-[#0B1120] text-white py-16 relative overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 w-full h-full">
+          <div className="absolute top-[20%] left-[10%] w-96 h-96 bg-blue-600/10 rounded-full filter blur-3xl animate-pulse"></div>
+          <div
+            className="absolute top-[50%] right-[15%] w-80 h-80 bg-purple-600/10 rounded-full filter blur-3xl animate-pulse"
+            style={{ animationDelay: "2s" }}
+          ></div>
+          <div
+            className="absolute bottom-[15%] left-[20%] w-72 h-72 bg-cyan-600/10 rounded-full filter blur-3xl animate-pulse"
+            style={{ animationDelay: "4s" }}
+          ></div>
+        </div>
+      </div>
 
-        <div className="space-y-10">
+      <div className="container mx-auto max-w-6xl px-4 relative z-10">
+        <div className="mb-16">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-indigo-600 tracking-tight">
+            Code Snippets
+          </h1>
+          <p className="text-xl md:text-2xl text-blue-100/80 max-w-3xl leading-relaxed">
+            A collection of useful Discord.js code snippets from my projects.
+          </p>
+        </div>
+
+        <div className="space-y-12">
           {codeSnippets.map((snippet) => (
-            <div key={snippet.id} className="bg-gray-900/80 rounded-lg overflow-hidden">
-              <div className="bg-gray-800 p-3 md:p-4 flex flex-col md:flex-row md:items-center md:justify-between">
-                <div className="flex items-center mb-2 md:mb-0">
-                  <FaCode className="text-blue-400 mr-2 md:mr-3" />
-                  <h3 className="text-lg md:text-xl font-semibold">{snippet.title}</h3>
-                </div>
-                <span className="px-2 py-1 bg-blue-600/30 text-blue-400 rounded text-sm w-fit">
-                  {snippet.language}
-                </span>
+            <div 
+              key={snippet.id}
+              className="bg-[#111827]/40 backdrop-blur-sm rounded-xl overflow-hidden border border-[#1E293B] hover:border-blue-500/50 transition-all duration-500 shadow-lg"
+            >
+              <div className="p-6 border-b border-[#1E293B]">
+                <h2 className="text-2xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-purple-400">
+                  {snippet.title}
+                </h2>
+                <p className="text-blue-100/70 mb-0">
+                  {snippet.description}
+                </p>
               </div>
-              <div className="p-3 md:p-4">
-                <p className="text-gray-300 text-sm md:text-base mb-4">{snippet.description}</p>
-                <div className="bg-gray-950 rounded-lg p-2 md:p-4 overflow-x-auto text-sm">
-                  <pre className="!bg-transparent">
-                    <code className={`language-${snippet.language}`}>
-                      {snippet.code}
-                    </code>
-                  </pre>
-                </div>
+              <div className="overflow-x-auto">
+                <pre className="line-numbers p-0 m-0 rounded-none">
+                  <code className={`language-${snippet.language}`}>
+                    {snippet.code}
+                  </code>
+                </pre>
               </div>
             </div>
           ))}

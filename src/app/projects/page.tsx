@@ -143,7 +143,7 @@ export default function Projects() {
             My Projects
           </h1>
           <p className="text-xl md:text-2xl text-blue-100/80 max-w-3xl leading-relaxed">
-            A showcase of Discord bots I've developed for various communities and
+            A showcase of Discord bots I&apos;ve developed for various communities and
             purposes.
           </p>
         </div>

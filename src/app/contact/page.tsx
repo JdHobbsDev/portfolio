@@ -119,7 +119,7 @@ export default function Contact() {
               Ready to Start a Project?
             </h2>
             <p className="text-blue-100/80 text-lg mb-8">
-              I'm currently available for freelance work. If you have a project
+              I&apos;m currently available for freelance work. If you have a project
               that needs some creative coding, feel free to reach out and we can
               discuss the details.
             </p>

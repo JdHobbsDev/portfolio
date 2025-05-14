@@ -83,7 +83,7 @@ export default function Projects() {
       icon: <FaBrain className="text-white text-2xl" />,
       color: "from-purple-600 to-indigo-600",
       tags: ["Discord.js", "Node.js", "Mental Health", "Community"],
-      website: "https://mindsmatter.uk",
+      website: "https://mindsmatter.xyz",
       hasScreenshots: true, 
     },
     {
@@ -94,7 +94,7 @@ export default function Projects() {
       icon: <FaGamepad className="text-white text-2xl" />,
       color: "from-emerald-600 to-teal-600",
       tags: ["Discord.js", "Node.js", "Ticket System", "Game Studio"],
-      website: "https://asteroidstudios.co.uk",
+      website: "https://www.asteroidgames.co.uk/",
       hasScreenshots: true, 
     },
     {
